@@ -1,17 +1,16 @@
 package com.logmein.testing;
 
 import java.nio.file.FileSystems;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
 
-import org.junit.Before;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -23,6 +22,7 @@ public class SeleniumTests
 	
 	@Before
 	public void Before() {
+		/*
 		String driverPath = FileSystems.getDefault().getPath("src/test/resources/geckodriver").toString();
 		System.setProperty("webdriver.gecko.driver", driverPath);
    	
@@ -31,10 +31,15 @@ public class SeleniumTests
 		firefoxOptions.setHeadless(false);
 		
 		browser = new FirefoxDriver(firefoxOptions);
+		*/
+		
+		String driverPath = FileSystems.getDefault().getPath("src/test/resources/chromedriver").toString();
+		System.setProperty("webdriver.chrome.driver", driverPath);	
+		browser = new ChromeDriver();
 	}
 
     @Test
-	public void searchForTextUseId() throws InterruptedException{
+	public void searchForTextUseId(){
     	browser.get("http://automationpractice.com/");
     	WebElement searchField = browser.findElement(By.id("search_query_top"));
         searchField.sendKeys("by id");
@@ -54,6 +59,20 @@ public class SeleniumTests
         searchField.sendKeys("by className");
 	}
     
+    @Test
+	public void searchForTextUseTagnameId(){
+    	browser.get("http://automationpractice.com/");
+    	WebElement searchField = browser.findElement(By.cssSelector("input#search_query_top"));
+        searchField.sendKeys("by tagname and id");
+	}
+    
+    @Test
+	public void searchForTextUseTagnameClassnameAttribute(){
+    	browser.get("http://automationpractice.com/");
+    	WebElement searchField = browser.findElement(By.cssSelector("input.search_query[placeholder=Search]"));
+        searchField.sendKeys("by tagname, classname and attribute");
+	}
+    
     // example for tag name
     // also an example for the fact
     // that you really should try to use a specific locator :)
@@ -63,11 +82,31 @@ public class SeleniumTests
     	// since there are multiple buttons on the site
     	// this locator will return with the first one
     	// which is not really what we're looking for
-    	WebElement newsField = browser.findElement(By.id("newsletter_block_left"));
-        WebElement signUpButton = newsField.findElement(By.tagName("button"));
+        WebElement signUpButton = browser.findElement(By.tagName("button"));
         signUpButton.click();
 	}
     
+    @Test
+	public void signInUseLinkText(){
+    	browser.get("http://automationpractice.com/");
+        WebElement signInButton = browser.findElement(By.linkText("Sign in"));
+        signInButton.click();
+	}
+    
+    @Test
+	public void signInUsePartialLinkText(){
+    	browser.get("http://automationpractice.com/");
+        WebElement signInButton = browser.findElement(By.partialLinkText("Sign"));
+        signInButton.click();
+	}
+    
+    @Test
+	public void signInUseXPath(){
+    	browser.get("http://automationpractice.com/");
+        WebElement signInButton = browser.findElement(By.xpath("//*[@id=\"header\"]/div[2]/div/div/nav/div[1]/a"));        
+        signInButton.click();
+	}
+
     // https://seleniumhq.github.io/selenium/docs/api/java/org/openqa/selenium/support/ui/ExpectedConditions.html
     @Test
 	public void contactUsSendEmptyMessage(){
@@ -75,10 +114,41 @@ public class SeleniumTests
         WebElement contactUsButton = browser.findElement(By.linkText("Contact us"));
         contactUsButton.click();
         
-        (new WebDriverWait(browser, 5)).until(ExpectedConditions.elementToBeClickable(By.id("submitMessage")));
-        
         WebElement sendButton = browser.findElement(By.id("submitMessage"));
+        (new WebDriverWait(browser, 5)).until(ExpectedConditions.elementToBeClickable(sendButton));
+        
         sendButton.click();
+	}
+    
+    @Test
+	public void switchBetweenTabs(){
+    	browser.get("http://automationpractice.com/");
+
+    	WebElement fbFollowLink = browser.findElement(By.cssSelector("li.facebook")).findElement(By.tagName("a"));
+    	fbFollowLink.click();    	
+    	
+        ArrayList<String> tabs = new ArrayList<String>(browser.getWindowHandles());
+        
+        // get the first tab and close it
+        browser.switchTo().window(tabs.get(0));
+        browser.close();
+	}
+    
+    @Test
+	public void openNewTabsWindows(){
+    	browser.get("http://automationpractice.com/");
+
+    	((JavascriptExecutor)browser).executeScript("window.open();");
+    	
+    	// alternative for opening a windows - not a portable solution!
+    	// String selectLinkOpeninNewTab = Keys.chord(Keys.CONTROL,"t");
+    	// driver.findElement(By.tagName("body")).sendKeys(selectLinkOpeninNewTab);
+    	
+        ArrayList<String> windows = new ArrayList<String>(browser.getWindowHandles());
+
+        // get the first tab and close it
+        browser.switchTo().window(windows.get(0));
+        browser.close();
 	}
     
 	@After
