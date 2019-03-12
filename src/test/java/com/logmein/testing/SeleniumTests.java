@@ -10,7 +10,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -22,7 +21,6 @@ public class SeleniumTests
 	
 	@Before
 	public void Before() {
-		/*
 		String driverPath = FileSystems.getDefault().getPath("src/test/resources/geckodriver").toString();
 		System.setProperty("webdriver.gecko.driver", driverPath);
    	
@@ -31,11 +29,6 @@ public class SeleniumTests
 		firefoxOptions.setHeadless(false);
 		
 		browser = new FirefoxDriver(firefoxOptions);
-		*/
-		
-		String driverPath = FileSystems.getDefault().getPath("src/test/resources/chromedriver").toString();
-		System.setProperty("webdriver.chrome.driver", driverPath);	
-		browser = new ChromeDriver();
 	}
 
     @Test
