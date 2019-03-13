@@ -21,7 +21,7 @@ public class SeleniumTests
 	
 	@Before
 	public void Before() {
-		String driverPath = FileSystems.getDefault().getPath("src/test/resources/geckodriver").toString();
+		String driverPath = FileSystems.getDefault().getPath("src/test/resources/geckodriver.exe").toString();
 		System.setProperty("webdriver.gecko.driver", driverPath);
    	
 		FirefoxOptions firefoxOptions = new FirefoxOptions();
