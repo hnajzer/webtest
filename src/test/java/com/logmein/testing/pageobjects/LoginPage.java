@@ -2,6 +2,9 @@ package com.logmein.testing.pageobjects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginPage {
 	
@@ -11,8 +14,12 @@ public class LoginPage {
     By passwordLocator = By.id("passwd");
     By submitLoginButtonLocator = By.id("SubmitLogin");
 
-    public LoginPage(WebDriver driver) {
-        this.browser = driver;
+    public LoginPage(WebDriver browser) {
+        this.browser = browser;
+        
+        // wait until the page is interactable
+        WebElement submitLoginButton = browser.findElement(submitLoginButtonLocator);
+        (new WebDriverWait(browser, 5)).until(ExpectedConditions.elementToBeClickable(submitLoginButton));
     }
 
     public LoginPage typeEmail(String email) {

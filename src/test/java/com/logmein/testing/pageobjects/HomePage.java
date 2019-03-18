@@ -13,9 +13,12 @@ public class HomePage {
 
     By signInButtonLocator = By.cssSelector("a.login");
     By myAccountButtonLocator = By.cssSelector("a.account");
+    By contactUsButtonLocator = By.linkText("Contact us");
+    By successFieldLocator = By.cssSelector("p.alert-success");
 
-    public HomePage(WebDriver driver) {
-        this.browser = driver;
+
+    public HomePage(WebDriver browser) {
+        this.browser = browser;
     }
 
     public LoginPage signIn() {
@@ -24,10 +27,23 @@ public class HomePage {
         return new LoginPage(browser);
     }
     
+    public ContactUsPage openContactUsPage() {
+    	browser.get(homeUrl);
+    	browser.findElement(contactUsButtonLocator).click();
+        return new ContactUsPage(browser);
+    }
+    
     public boolean isSignedIn() {
     	WebElement myAccountButton = browser.findElement(myAccountButtonLocator);
         (new WebDriverWait(browser, 5)).until(ExpectedConditions.elementToBeClickable(myAccountButton));
 
         return myAccountButton.getText().equals("szte test");
+    }
+    
+    public boolean isMessageSuccessfullySent() {
+        WebElement successField = browser.findElement(successFieldLocator);
+        (new WebDriverWait(browser, 5)).until(ExpectedConditions.visibilityOf(successField));
+
+        return successField.getText().equals("Your message has been successfully sent to our team.");
     }
 }
