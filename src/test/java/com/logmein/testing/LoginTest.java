@@ -4,21 +4,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.nio.file.FileSystems;
-import java.util.ArrayList;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.logmein.testing.pageobjects.HomePage;
+import com.logmein.testing.pageobjects.LoginPage;
 
 public class LoginTest 
 {
@@ -34,7 +33,7 @@ public class LoginTest
 	}
 
     @Test
-	public void openNewTabsWindows(){
+	public void loginWithValidCredentials(){
     	browser.get("http://automationpractice.com/");
     	
     	WebElement signInButton = browser.findElement(By.cssSelector("a.login"));
@@ -57,8 +56,12 @@ public class LoginTest
 	}
     
     @Test
-	public void openNewTabsWindowsWithPOs(){
-
+	public void loginWithValidCredentialsUsePOs(){
+    	HomePage homePage = new HomePage(browser);
+    	
+    	LoginPage loginPage = homePage.signIn();
+    	homePage = loginPage.loginAs("najzer.helga@gmail.com", "test1234");
+    	assertTrue("The account logged in is not the expected one!", homePage.isSignedIn());
 	}
     
 	@After
